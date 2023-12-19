@@ -1,9 +1,31 @@
 import socket
 
+URLS={
+    '/':'hello index',
+    '/blog':'hello blog'
+}
+def parse_request(request):
+    parsed=request.split(' ')
+    method=parsed[0]
+    url=parsed[1]
+    return (method, url)
+
+def generate_headers(method, url):
+    if not method=='GET':
+        return ('HTTP/1.1 405 Method not allowed\n\n', 405)
+    if not url in URLS:
+        return ('HTTP/1.1 404 Not found\n\n', 404)
+    
+    return ('HTTP/1.1 200 OK\n\n', 200)
+    
+
 def generate_response(request):
-    pass
-
-
+    # необходимо распарсить request, который был получен в функции run()
+    method, url=parse_request(request)
+    # ответ клиенту-заголовок и тело текста
+    headers, code= generate_headers(method, url)
+    # функция generate_headers будет заниматься генерацией статуса кода
+    return (headers+'hello world').encode()
 
 def run():
 # создает объект, принимающий запрос
@@ -30,7 +52,7 @@ def run():
 
         response=generate_response(request.decode('utf-8'))
 # после получения запроса необходимо ответить клиенту
-        client_socket.sendall('hello world'.encode())
+        client_socket.sendall(response)
         # сокеты не принимают строки-только байты
         client_socket.close()
         # в браузере нельзя увидеть ответ, пока не закрыт соелинение

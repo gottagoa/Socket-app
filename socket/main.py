@@ -1,14 +1,17 @@
 import socket
+from views import index, blog
 
 URLS={
-    '/':'hello index',
-    '/blog':'hello blog'
+    '/':index,
+    '/blog':blog
 }
+
 def parse_request(request):
     parsed=request.split(' ')
     method=parsed[0]
     url=parsed[1]
     return (method, url)
+
 
 def generate_headers(method, url):
     if not method=='GET':
@@ -19,11 +22,21 @@ def generate_headers(method, url):
     return ('HTTP/1.1 200 OK\n\n', 200)
     
 
+def generate_content(code, url):
+    if code==404:
+        return '<h1>404</h1>Not found<p></p>'
+    if code==405:
+        return '<h1>404</h1>Method is not allowed<p></p>'
+    return URLS[url]()
+
+
 def generate_response(request):
     # необходимо распарсить request, который был получен в функции run()
     method, url=parse_request(request)
     # ответ клиенту-заголовок и тело текста
     headers, code= generate_headers(method, url)
+    body=generate_content(code, url)
+    # генерация тела ответа
     # функция generate_headers будет заниматься генерацией статуса кода
     return (headers+'hello world').encode()
 
@@ -56,8 +69,6 @@ def run():
         # сокеты не принимают строки-только байты
         client_socket.close()
         # в браузере нельзя увидеть ответ, пока не закрыт соелинение
-
-
 
 if __name__=='__main__':
     run()

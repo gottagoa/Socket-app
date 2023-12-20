@@ -40,6 +40,7 @@ def generate_response(request):
     # функция generate_headers будет заниматься генерацией статуса кода
     return (headers+'hello world').encode()
 
+
 def run():
 # создает объект, принимающий запрос
     server_socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -69,6 +70,7 @@ def run():
         # сокеты не принимают строки-только байты
         client_socket.close()
         # в браузере нельзя увидеть ответ, пока не закрыт соелинение
+
 
 if __name__=='__main__':
     run()

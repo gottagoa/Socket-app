@@ -1,8 +1,8 @@
 def index():
-    with open('templates/index.html') as template:
+    with open('/Users/ajzanylsabdanbekova/Desktop/python/sockets/socket/templates/index.html') as template:
         return template.read()
     
 
 def blog():
-    with open('templates/blog.html') as template:
+    with open('/Users/ajzanylsabdanbekova/Desktop/python/sockets/socket/templates/blog.html') as template:
         return template.read()
